@@ -7,12 +7,12 @@ const rootDir=require('../utils/path.js');
 
 
 
-router.get("/add_product", (req, res, next) => {
+router.get("/add-product", (req, res, next) => {
 //   res.send(
 //     '<form action="/admin/product" method="POST"><input type="text" name="title"><button type="submit">Submit</button></form>'
 //   );
-//   res.sendFile(path.join(__dirname,'..','views','add_product.html'))
-  res.sendFile(path.join(rootDir,'views','add_product.html'))
+//   res.sendFile(path.join(__dirname,'..','views','add-product.html'))
+  res.sendFile(path.join(rootDir,'views','add-product.html'))
 });
 
 //triggered for all requests
@@ -20,7 +20,7 @@ router.get("/add_product", (req, res, next) => {
 //     console.log('req.body: ',req.body);
 //     res.redirect("/");
 // })
-router.post("/add_product",(req,res,next)=>{
+router.post("/add-product",(req,res,next)=>{
     console.log('req.body: ',req.body);
     res.redirect("/");
 });

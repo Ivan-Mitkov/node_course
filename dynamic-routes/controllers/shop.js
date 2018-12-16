@@ -15,6 +15,9 @@ exports.getProduct = (req, res, next) => {
   //we use productId in routes as name after the :
   const prodId = req.params.productId;
   Product.findById(prodId, p => {
+    if(!p){
+      return;
+    }
     res.render("shop/product-detail", {
       product: p,
       pageTitle: p.title,
@@ -34,9 +37,21 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render("shop/cart", {
-    path: "/cart",
-    pageTitle: "Your Cart"
+  Cart.getCart(cart => {
+    Product.fetchAll(products => {
+      const cartProducts = [];
+      for (let product of products) {
+        const cardProductData = cart.products.find(p => p.id === product.id);
+        if (cardProductData) {
+          cartProducts.push({ productData: product, qty: cardProductData.qty });
+        }
+      }
+      res.render("shop/cart", {
+        path: "/cart",
+        pageTitle: "Your Cart",
+        products: cartProducts
+      });
+    });
   });
 };
 exports.postCart = (req, res, next) => {
@@ -45,7 +60,15 @@ exports.postCart = (req, res, next) => {
   Product.findById(prodId, product => {
     Cart.addProduct(prodId, product.price);
   });
-  res.redirect('shop/cart')
+  res.redirect("/cart");
+};
+exports.postCartDelete = (req, res, next) => {
+  //we are using productId in view
+  const prodId = req.body.productId;
+  Product.findById(prodId, product => {
+    Cart.deleteFromCart(prodId, product.price);
+    res.redirect("/cart");
+  });
 };
 
 exports.getOrders = (req, res, next) => {
